@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: controller
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/firestar
+    username: root
+    password: 123456 # Replace this with your actual password
+
+server:
+  port: 7688
+  servlet:
+    context-path:  # Ensure there's no typo here
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  global-config:
+#    dbConfig:
+#      id-type: auto
+#  mapper-locations: classpath*:/mapper/**/*.xml
+#  type-aliases-package: com.example.dao
