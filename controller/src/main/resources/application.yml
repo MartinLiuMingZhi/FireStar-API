@@ -9,6 +9,25 @@ spring:
     url: jdbc:mysql://localhost:3306/firestar
     username: root
     password: 123456 # Replace this with your actual password
+  #邮件发送配置
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    protocol: smtp
+    username: 3108531642@qq.com
+    password: victdgxjeczpdgaj
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  redis:
+    host: localhost
+    port: 6379
+
 
 server:
   port: 7688
@@ -19,8 +38,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#  global-config:
-#    dbConfig:
-#      id-type: auto
-#  mapper-locations: classpath*:/mapper/**/*.xml
-#  type-aliases-package: com.example.dao
+
+jwt:
+  secret: FireStar
+  expiration: 86400000 # 1天

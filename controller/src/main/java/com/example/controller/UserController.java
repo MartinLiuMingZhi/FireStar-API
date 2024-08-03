@@ -1,10 +1,15 @@
 package com.example.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.Result;
+import com.example.common.exception.ServiceException;
+import com.example.dao.UserMapper;
 import com.example.model.dto.LoginRequest;
 import com.example.model.dto.LoginResponse;
 import com.example.model.dto.RegisterRequest;
+import com.example.model.dto.RegisterResponse;
 import com.example.model.pojo.User;
+import com.example.service.RedisService;
 import com.example.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +26,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedisService redisService;
+
     @PostMapping("/login")
     public Result login(@RequestBody LoginRequest loginRequest){
         String email = loginRequest.getEmail();
@@ -34,7 +42,31 @@ public class UserController {
 
     @PostMapping("/register")
     public Result register(@RequestBody RegisterRequest registerRequest){
+        String email = registerRequest.getEmail();
+        String password = registerRequest.getPassword();
+        String checkPassword = registerRequest.getCheckPassword();
+        String code = registerRequest.getCode();
+        if (StringUtils.isAnyBlank(email,password,checkPassword,code)){
+            return Result.error("400","请确认输入不为空");
+        }
+        if (!password.equals(checkPassword)){
+            return Result.error("401","两次输入的密码不一致");
+        }
+        //验证邮箱验证码
+        String storedCode = redisService.getCode(email);
+        if (!(storedCode != null && storedCode.equals(code))) {
+            // 验证码正确，删除验证码
+            redisService.deleteCode(email);
+            return Result.error("401","验证码错误或已过期");
+        }
 
-        return Result.success();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email",registerRequest.getEmail());
+        User user = userService.getOne(queryWrapper);
+        if (user != null){
+            return Result.error("402","注册失败,用户已存在");
+        }
+        RegisterResponse userInfo = userService.register(registerRequest);
+        return Result.success(userInfo);
     }
 }
