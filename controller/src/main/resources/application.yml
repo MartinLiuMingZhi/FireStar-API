@@ -11,6 +11,7 @@ spring:
     password: 123456 # Replace this with your actual password
   #邮件发送配置
   mail:
+    port: 465
     default-encoding: UTF-8
     host: smtp.qq.com
     protocol: smtp
@@ -23,6 +24,8 @@ spring:
           starttls:
             enable: true
             required: true
+          ssl:
+            enable: true
 
   redis:
     host: localhost
