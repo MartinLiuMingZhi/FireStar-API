@@ -13,4 +13,6 @@ public class RegisterResponse {
     private String avatar;
 
     private String sex;
+
+    private String token;
 }
