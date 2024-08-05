@@ -41,6 +41,11 @@
             <artifactId>model</artifactId>
             <version>${firestar.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.example.config</groupId>
+            <artifactId>config</artifactId>
+            <version>${firestar.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.mysql</groupId>

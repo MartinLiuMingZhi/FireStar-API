@@ -45,3 +45,11 @@ mybatis-plus:
 jwt:
   secret: FireStar
   expiration: 86400000 # 1天
+
+  logging:
+    level:
+      org:
+        springframework:
+          web:
+            socket: DEBUG
+          messaging: DEBUG

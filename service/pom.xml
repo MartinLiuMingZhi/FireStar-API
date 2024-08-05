@@ -55,6 +55,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.example.config</groupId>
+            <artifactId>config</artifactId>
+            <version>${firestar.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
