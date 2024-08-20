@@ -8,15 +8,15 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/firestar
     username: root
-    password: 123456 # Replace this with your actual password
+    password: 数据库密码 # Replace this with your actual password
   #邮件发送配置
   mail:
     port: 465
     default-encoding: UTF-8
     host: smtp.qq.com
     protocol: smtp
-    username: 3108531642@qq.com
-    password: victdgxjeczpdgaj
+    username: 邮箱
+    password: 密码
     properties:
       mail:
         smtp:
