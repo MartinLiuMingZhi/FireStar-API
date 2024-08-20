@@ -1,29 +1,37 @@
 package com.example.controller;
 
-import com.example.model.pojo.Message;
+import com.example.model.pojo.Messages;
+import com.example.model.dto.MessageDTO;
+import com.example.service.MessagesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.time.LocalDateTime;
+
 @CrossOrigin
 @Controller
 public class ChatController {
 
+    @Autowired
+    private MessagesService messagesService;
+
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public Message send(Message message) throws Exception {
-        // 模拟处理延迟
-        Thread.sleep(1000);
+    public Messages send(MessageDTO messageDTO) throws Exception {
+        Messages message = new Messages();
+        message.setSenderId(messageDTO.getSenderId());
+        message.setReceiverId(messageDTO.getReceiverId());
+        message.setContent(messageDTO.getContent());
+        message.setTimestamp(LocalDateTime.now());
+
+        messagesService.save(message);
         return message;
-//        return new Message("刘明智","Hello");
+
     }
 
-    // 省略其他代码
-//    @MessageMapping("/receive")
-//    @SendTo("/topic/messages")
-//    public Message receiveMessage(Message message) {
-//        return message;
-//    }
+
 
 }

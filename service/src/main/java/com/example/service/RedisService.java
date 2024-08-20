@@ -26,4 +26,19 @@ public class RedisService {
     public void deleteCode(String email) {
         redisTemplate.delete(email);
     }
+
+    // 存储令牌
+    public void saveToken(String token, String email) {
+        redisTemplate.opsForValue().set(token, email, 1, TimeUnit.DAYS); // 设置令牌有效期为 1 天
+    }
+
+    // 验证令牌是否存在
+    public boolean validateToken(String token) {
+        return redisTemplate.hasKey(token);
+    }
+
+    // 删除令牌
+    public void deleteToken(String token) {
+        redisTemplate.delete(token);
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.model.pojo;
+package com.example.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
-    private String from;
-    private String text;
-
-    // getters and setters
+public class MessageDTO {
+    private Long senderId;
+    private Long receiverId;
+    private String content;
 }

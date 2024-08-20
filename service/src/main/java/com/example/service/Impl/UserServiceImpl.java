@@ -60,6 +60,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setPassword(registerRequest.getPassword());
+        user.setUsername("Android Studio");
+        user.setAvatar("https://image.liumingzhi.cn/file/20e84180e9663145e6e49.png");
         boolean saveResult = this.save(user);
         if (!saveResult){
             throw new ServiceException("注册失败，数据库错误");
@@ -71,6 +73,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         RegisterResponse registerResponse = new RegisterResponse();
         registerResponse.setEmail(registerRequest.getEmail());
+        registerResponse.setUsername(user.getUsername());
+        registerResponse.setAvatar(user.getAvatar());
         registerResponse.setToken(token);
 
         return registerResponse;
