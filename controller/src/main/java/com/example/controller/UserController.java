@@ -1,13 +1,13 @@
 package com.example.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.common.MyPage;
 import com.example.common.Result;
 import com.example.common.exception.ServiceException;
 import com.example.dao.UserMapper;
-import com.example.model.dto.LoginRequest;
-import com.example.model.dto.LoginResponse;
-import com.example.model.dto.RegisterRequest;
-import com.example.model.dto.RegisterResponse;
+import com.example.model.dto.*;
 import com.example.model.pojo.User;
 import com.example.service.RedisService;
 import com.example.service.UserService;
@@ -17,6 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @Slf4j
@@ -91,6 +95,53 @@ public class UserController {
         redisService.deleteToken(token);
 
         return Result.success("退出登录成功");
+    }
+
+    @PostMapping("/update")
+    public Result update(){
+        
+        return Result.success();
+    }
+
+    @GetMapping("/getUsers")
+    public Result getUsers(){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>(null);
+        List<User> users = userService.getBaseMapper().selectList(queryWrapper);
+
+        List<UserDTO> userDTOS  = new ArrayList<>();
+        for (User user: users) {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserid(user.getUserid());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setUsername(user.getUsername());
+            userDTO.setSex(user.getSex());
+            userDTO.setAvatar(user.getAvatar());
+            userDTOS.add(userDTO);
+        }
+        return Result.success(userDTOS);
+    }
+
+    @GetMapping("/page")
+    public Result page(@RequestBody MyPage myPage){
+        IPage<User> iPage = new Page<>(myPage.getPage(), myPage.getPageSize());
+        IPage<User> newPage = userService.page(iPage,null);
+
+        // 将 User 转换为 UserDTO
+        List<UserDTO> userDTOList = newPage.getRecords().stream().map(user -> {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserid(user.getUserid());
+            userDTO.setUsername(user.getUsername());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setAvatar(user.getAvatar());
+            userDTO.setSex(user.getSex());
+            return userDTO;
+        }).collect(Collectors.toList());
+
+        // 创建新的分页对象
+        IPage<UserDTO> userDTOPage = new Page<>(newPage.getCurrent(), newPage.getSize(), newPage.getTotal());
+        userDTOPage.setRecords(userDTOList);
+
+        return Result.success(userDTOPage);
     }
 
 }
