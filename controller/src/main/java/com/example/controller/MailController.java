@@ -2,6 +2,7 @@ package com.example.controller;
 
 import cn.hutool.log.Log;
 import com.example.common.Result;
+import com.example.common.UserConstant;
 import com.example.model.dto.VerifyCodeRequest;
 import com.example.service.MailService;
 import com.example.service.RedisService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
+import java.util.regex.Pattern;
 
 @CrossOrigin
 @Slf4j
@@ -24,6 +26,11 @@ public class MailController {
 
     @GetMapping("/sendCode")
     public Result sendCode(String email){
+
+        if (!Pattern.matches(UserConstant.EMAIL_PATTERN,email)){
+            return Result.error("401","邮箱格式错误");
+        }
+
         String code = String.valueOf(new Random().nextInt(899999)+100000);
 
         // 保存验证码到Redis并设置有效期
@@ -41,6 +48,11 @@ public class MailController {
 
     @PostMapping("/verifyCode")
     public Result verifyCode(@RequestBody VerifyCodeRequest request){
+
+        if (!Pattern.matches(UserConstant.EMAIL_PATTERN,request.getEmail())){
+            return Result.error("401","邮箱格式错误");
+        }
+
         String storedCode = redisService.getCode(request.getEmail());
 
         if (storedCode != null && storedCode.equals(request.getCode())) {
