@@ -111,7 +111,7 @@ public class UserController {
         List<UserDTO> userDTOS  = new ArrayList<>();
         for (User user: users) {
             UserDTO userDTO = new UserDTO();
-            userDTO.setUserid(user.getUserid());
+            userDTO.setUserid(user.getId());
             userDTO.setEmail(user.getEmail());
             userDTO.setUsername(user.getUsername());
             userDTO.setSex(user.getSex());
@@ -129,7 +129,7 @@ public class UserController {
         // 将 User 转换为 UserDTO
         List<UserDTO> userDTOList = newPage.getRecords().stream().map(user -> {
             UserDTO userDTO = new UserDTO();
-            userDTO.setUserid(user.getUserid());
+            userDTO.setUserid(user.getId());
             userDTO.setUsername(user.getUsername());
             userDTO.setEmail(user.getEmail());
             userDTO.setAvatar(user.getAvatar());

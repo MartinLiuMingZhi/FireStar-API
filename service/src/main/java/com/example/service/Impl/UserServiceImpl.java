@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String token = JwtUtil.createJWT(secretKey, expirationTime, claims);
 
         LoginResponse userInfo = new LoginResponse();
-        userInfo.setUserid(dbUser.getUserid());
+        userInfo.setUserid(dbUser.getId());
         userInfo.setUsername(dbUser.getUsername());
         userInfo.setAvatar(dbUser.getAvatar());
         userInfo.setSex(dbUser.getSex());

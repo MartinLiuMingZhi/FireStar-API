@@ -10,8 +10,8 @@ import lombok.Data;
 @TableName(value = "user")
 public class User {
 
-    @TableId(value = "userid",type = IdType.AUTO)
-    private Long userid;
+    @TableId(value = "id",type = IdType.AUTO)
+    private Long id;
 
     @TableField(value = "username")
     private String username;
