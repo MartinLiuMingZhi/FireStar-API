@@ -9,4 +9,6 @@ public interface LikeService extends IService<Like> {
     boolean unlikePost(Long postId, Long userId);
 
     Long getLikeCountByPostId(Long postId);
+
+    String getLikeUsernamesByPostId(Long postId);
 }

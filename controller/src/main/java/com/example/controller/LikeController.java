@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.common.Result;
 import com.example.service.LikeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,22 @@ public class LikeController {
     private LikeService likeService;
 
     @PostMapping
-    public boolean likePost(@RequestParam Long postId, @RequestParam Long userId) {
-        return likeService.likePost(postId, userId);
+    public Result likePost(@RequestParam Long postId, @RequestParam Long userId) {
+        return Result.success(likeService.likePost(postId, userId));
     }
 
     @DeleteMapping
-    public boolean unlikePost(@RequestParam Long postId, @RequestParam Long userId) {
-        return likeService.unlikePost(postId, userId);
+    public Result unlikePost(@RequestParam Long postId, @RequestParam Long userId) {
+        return Result.success(likeService.unlikePost(postId, userId));
     }
 
     @GetMapping("/{postId}/count")
-    public Long getLikeCountByPostId(@PathVariable Long postId) {
-        return likeService.getLikeCountByPostId(postId);
+    public Result getLikeCountByPostId(@PathVariable Long postId) {
+        return Result.success(likeService.getLikeCountByPostId(postId));
     }
 
+    @GetMapping("/{postId}/usernames")
+    public Result getLikeUsernamesByPostId(@PathVariable Long postId) {
+        return Result.success(likeService.getLikeUsernamesByPostId(postId));
+    }
 }

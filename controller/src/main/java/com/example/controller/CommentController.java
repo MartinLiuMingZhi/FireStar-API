@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.model.pojo.Comment;
+import com.example.common.Result;
 import com.example.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +17,17 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public boolean addComment(@RequestParam Long postId, @RequestParam Long userId, @RequestParam String content) {
-        return commentService.addComment(postId, userId, content);
+    public Result addComment(@RequestParam Long postId, @RequestParam Long userId, @RequestParam String content) {
+        return Result.success(commentService.addComment(postId, userId, content));
     }
 
     @GetMapping("/{postId}")
-    public List<Comment> getCommentsByPostId(@PathVariable Long postId) {
-        return commentService.getCommentsByPostId(postId);
+    public Result getCommentsByPostId(@PathVariable Long postId) {
+        return Result.success(commentService.getCommentsByPostId(postId));
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteComment(@PathVariable Long id) {
-        return commentService.deleteComment(id);
+    public Result deleteComment(@PathVariable Long id) {
+        return Result.success(commentService.deleteComment(id));
     }
 }

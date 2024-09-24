@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.common.Result;
 import com.example.model.pojo.Post;
 import com.example.service.PostService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +18,17 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public boolean createPost(@RequestParam Long userId, @RequestParam String content) {
-        return postService.createPost(userId, content);
+    public Result createPost(@RequestParam Long userId, @RequestParam String content) {
+        return Result.success(postService.createPost(userId, content));
     }
 
     @GetMapping
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    public Result getAllPosts() {
+        return Result.success(postService.getAllPosts());
     }
 
     @DeleteMapping("/{id}")
-    public boolean deletePost(@PathVariable Long id) {
-        return postService.deletePost(id);
+    public Result deletePost(@PathVariable Long id) {
+        return Result.success(postService.deletePost(id));
     }
 }

@@ -15,8 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -78,5 +81,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         registerResponse.setToken(token);
 
         return registerResponse;
+    }
+
+    @Override
+    public List<String> getUsernamesByIds(List<Long> userIds) {
+        if (userIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.in("id", userIds);
+        List<User> users = this.list(userQueryWrapper);
+
+        return users.stream()
+                .map(User::getUsername)
+                .collect(Collectors.toList());
     }
 }
