@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.MyPage;
 import com.example.common.Result;
 import com.example.common.exception.ServiceException;
-import com.example.dao.UserMapper;
 import com.example.model.dto.*;
 import com.example.model.pojo.User;
 import com.example.service.RedisService;
@@ -143,5 +142,33 @@ public class UserController {
 
         return Result.success(userDTOPage);
     }
+
+    @GetMapping("/{id}")
+    public Result getUserById(@PathVariable Long id){
+        User user = userService.getById(id);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserid(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAvatar(user.getAvatar());
+        userDTO.setSex(user.getSex());
+        return Result.success(userDTO);
+    }
+
+    @GetMapping("/getUserByEmail")
+    public Result getUserByEmail(@RequestParam String email){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email",email);
+        User user = userService.getOne(queryWrapper);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserid(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAvatar(user.getAvatar());
+        userDTO.setSex(user.getSex());
+        return Result.success(userDTO);
+    }
+
+
 
 }
