@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.MyPage;
 import com.example.common.Result;
 import com.example.common.exception.ServiceException;
+import com.example.common.untils.JwtUtil;
 import com.example.model.dto.*;
 import com.example.model.pojo.User;
 import com.example.service.RedisService;
@@ -93,7 +94,14 @@ public class UserController {
         // 从 Redis 中删除 token
         redisService.deleteToken(token);
 
-        return Result.success("退出登录成功");
+        //设置状态为离线
+        boolean result =  userService.setOfflineStatus(token);
+
+        if (result){
+            return Result.success("退出登录成功");
+        }else {
+            return Result.error("500","退出登录失败");
+        }
     }
 
     @PostMapping("/update")
@@ -115,6 +123,7 @@ public class UserController {
             userDTO.setUsername(user.getUsername());
             userDTO.setSex(user.getSex());
             userDTO.setAvatar(user.getAvatar());
+            userDTO.setStatus(user.getStatus());
             userDTOS.add(userDTO);
         }
         return Result.success(userDTOS);
@@ -133,6 +142,7 @@ public class UserController {
             userDTO.setEmail(user.getEmail());
             userDTO.setAvatar(user.getAvatar());
             userDTO.setSex(user.getSex());
+            userDTO.setStatus(user.getStatus());
             return userDTO;
         }).collect(Collectors.toList());
 
@@ -152,6 +162,7 @@ public class UserController {
         userDTO.setEmail(user.getEmail());
         userDTO.setAvatar(user.getAvatar());
         userDTO.setSex(user.getSex());
+        userDTO.setStatus(user.getStatus());
         return Result.success(userDTO);
     }
 
@@ -166,6 +177,7 @@ public class UserController {
         userDTO.setEmail(user.getEmail());
         userDTO.setAvatar(user.getAvatar());
         userDTO.setSex(user.getSex());
+        userDTO.setStatus(user.getStatus());
         return Result.success(userDTO);
     }
 

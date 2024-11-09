@@ -13,4 +13,6 @@ public class UserDTO {
     private String avatar;
 
     private String sex;
+
+    private Long status;
 }

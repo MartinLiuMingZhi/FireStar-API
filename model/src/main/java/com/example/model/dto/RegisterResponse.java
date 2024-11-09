@@ -15,4 +15,6 @@ public class RegisterResponse {
     private String sex;
 
     private String token;
+
+    private Long status;
 }

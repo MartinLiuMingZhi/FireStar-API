@@ -2,6 +2,7 @@ package com.example.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.common.StatusConstant;
 import com.example.common.exception.ServiceException;
 import com.example.common.untils.JwtUtil;
 import com.example.dao.UserMapper;
@@ -54,6 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userInfo.setSex(dbUser.getSex());
         userInfo.setEmail(dbUser.getEmail());
         userInfo.setToken(token);
+        userInfo.setStatus(StatusConstant.ONLINE_STATUS);
 
         return userInfo;
     }
@@ -79,6 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         registerResponse.setUsername(user.getUsername());
         registerResponse.setAvatar(user.getAvatar());
         registerResponse.setToken(token);
+        registerResponse.setStatus(StatusConstant.ONLINE_STATUS);
 
         return registerResponse;
     }
@@ -96,5 +99,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return users.stream()
                 .map(User::getUsername)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean setOfflineStatus(String token) {
+        // 获取用户ID
+        Long userId = JwtUtil.getUserIdFromToken(secretKey,token); // 假设你有一个JWT工具类来解析token
+
+        // 设置用户状态为0
+        User user = new User();
+        user.setStatus(StatusConstant.OFFLINE_STATUS);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", userId);
+        boolean result = this.update(user, queryWrapper);
+        return result;
     }
 }

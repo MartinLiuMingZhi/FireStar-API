@@ -16,5 +16,7 @@ public interface UserService extends IService<User> {
     RegisterResponse register(RegisterRequest registerRequest);
 
     List<String> getUsernamesByIds(List<Long> userIds);
+
+    Boolean setOfflineStatus(String token);
 }
 

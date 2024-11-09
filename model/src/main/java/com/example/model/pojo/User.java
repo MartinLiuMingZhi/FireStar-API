@@ -27,4 +27,7 @@ public class User {
 
     @TableField(value = "sex")
     private String sex;
+
+    @TableField(value = "status")
+    private Long status;
 }

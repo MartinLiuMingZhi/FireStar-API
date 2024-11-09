@@ -1,5 +1,6 @@
 package com.example.common.untils;
 
+import cn.hutool.log.Log;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -54,6 +55,22 @@ public class JwtUtil {
                 // 设置需要解析的jwt
                 .parseClaimsJws(token).getBody();
         return claims;
+    }
+
+    /**
+     * 从Token中获取用户ID
+     *
+     * @param secretKey jwt秘钥
+     * @param token     加密后的token
+     * @return 用户ID
+     */
+    public static Long getUserIdFromToken(String secretKey, String token) {
+        try {
+            Claims claims = parseJWT(secretKey, token);
+            return Long.parseLong(claims.get("userId").toString());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get user ID from token", e);
+        }
     }
 
 }
