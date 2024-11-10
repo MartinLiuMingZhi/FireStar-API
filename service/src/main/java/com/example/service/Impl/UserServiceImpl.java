@@ -44,9 +44,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //        String token = TokenUtils.genToken(dbUser.getId().toString(), dbUser.getPassword());
 //        dbUser.setToken(token);
         //创建jwt令牌
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", dbUser.getEmail());
-        String token = JwtUtil.createJWT(secretKey, expirationTime, claims);
+        String token = JwtUtil.createJWT(secretKey, expirationTime, dbUser.getEmail());
+
+        if (dbUser.getStatus() == StatusConstant.OFFLINE_STATUS){
+            dbUser.setStatus(StatusConstant.ONLINE_STATUS);
+            this.updateById(dbUser);
+        }
 
         LoginResponse userInfo = new LoginResponse();
         userInfo.setUserid(dbUser.getId());
@@ -55,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userInfo.setSex(dbUser.getSex());
         userInfo.setEmail(dbUser.getEmail());
         userInfo.setToken(token);
-        userInfo.setStatus(StatusConstant.ONLINE_STATUS);
+        userInfo.setStatus(dbUser.getStatus());
 
         return userInfo;
     }
@@ -67,21 +70,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(registerRequest.getPassword());
         user.setUsername("Android Studio");
         user.setAvatar("https://image.liumingzhi.cn/file/20e84180e9663145e6e49.png");
+        user.setStatus(StatusConstant.ONLINE_STATUS);
         boolean saveResult = this.save(user);
         if (!saveResult){
             throw new ServiceException("注册失败，数据库错误");
         }
         //创建jwt令牌
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", user.getEmail());
-        String token = JwtUtil.createJWT(secretKey, expirationTime, claims);
+        String token = JwtUtil.createJWT(secretKey, expirationTime, user.getEmail());
 
         RegisterResponse registerResponse = new RegisterResponse();
         registerResponse.setEmail(registerRequest.getEmail());
         registerResponse.setUsername(user.getUsername());
         registerResponse.setAvatar(user.getAvatar());
         registerResponse.setToken(token);
-        registerResponse.setStatus(StatusConstant.ONLINE_STATUS);
+        registerResponse.setStatus(user.getStatus());
 
         return registerResponse;
     }
@@ -104,13 +106,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Boolean setOfflineStatus(String token) {
         // 获取用户ID
-        Long userId = JwtUtil.getUserIdFromToken(secretKey,token); // 假设你有一个JWT工具类来解析token
+        String email = JwtUtil.getEmailFromToken(secretKey,token); // 假设你有一个JWT工具类来解析token
 
         // 设置用户状态为0
         User user = new User();
         user.setStatus(StatusConstant.OFFLINE_STATUS);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", userId);
+        queryWrapper.eq("email",email );
         boolean result = this.update(user, queryWrapper);
         return result;
     }

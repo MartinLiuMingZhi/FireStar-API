@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class JwtUtil {
@@ -17,16 +18,19 @@ public class JwtUtil {
      *
      * @param secretKey jwt秘钥
      * @param ttlMillis jwt过期时间(毫秒)
-     * @param claims    设置的信息
+     * @param email    设置的信息
      * @return
      */
-    public static String createJWT(String secretKey, long ttlMillis, Map<String, Object> claims) {
+    public static String createJWT(String secretKey, long ttlMillis,String email) {
         // 指定签名的时候使用的签名算法，也就是header那部分
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
         // 生成JWT的时间
         long expMillis = System.currentTimeMillis() + ttlMillis;
         Date exp = new Date(expMillis);
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", email);
 
         // 设置jwt的body
         JwtBuilder builder = Jwts.builder()
@@ -64,10 +68,10 @@ public class JwtUtil {
      * @param token     加密后的token
      * @return 用户ID
      */
-    public static Long getUserIdFromToken(String secretKey, String token) {
+    public static String getEmailFromToken(String secretKey, String token) {
         try {
             Claims claims = parseJWT(secretKey, token);
-            return Long.parseLong(claims.get("userId").toString());
+            return claims.get("email").toString();
         } catch (Exception e) {
             throw new RuntimeException("Failed to get user ID from token", e);
         }
