@@ -18,5 +18,7 @@ public interface UserService extends IService<User> {
     List<String> getUsernamesByIds(List<Long> userIds);
 
     Boolean setOfflineStatus(String token);
+
+    void updateUserStatus(Long userId, boolean online);
 }
 

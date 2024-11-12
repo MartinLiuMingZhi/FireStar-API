@@ -116,4 +116,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         boolean result = this.update(user, queryWrapper);
         return result;
     }
+
+    @Override
+    public void updateUserStatus(Long userId, boolean online) {
+
+    }
 }

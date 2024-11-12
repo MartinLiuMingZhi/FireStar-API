@@ -19,7 +19,7 @@ public class MessagesController {
     @PostMapping
     public Result createMessage(@RequestBody Messages message) {
         boolean flag = messagesService.save(message);
-        if (flag == true){
+        if (flag){
             return Result.success("保存成功");
         }
         else {
